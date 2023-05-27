@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block header %}
+{% load static %}
+
+
+
+<style>
+
+    .anime__video__player {
+    width: 400px;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    }
+    
+    .anime__video__player video {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    }
+    
+    .anime__video__player video::poster {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    }
+    </style>
+
+
+    
+</section>
+    
+    <!-- Hero Section Begin -->
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero__slider owl-carousel">
+                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/akat.jpg' %}">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hero__text">
+                                <!-- <div class="label">Adventure</div> -->
+                                <h2>Anime</h2>
+                                <p>No amount of talent trumps hard work....</p>
+                                <a href="/login"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/peakpx.jpg' %}">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hero__text">
+                                <!-- <div class="label">Adventure</div> -->
+                                <h2>Movies</h2>
+                                <p>A short phrase that captures the essence of the plot...</p>
+                                <a href="/login"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/403408.jpg' %}">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="hero__text">
+                                <!-- <div class="label">Adventure</div> -->
+                                <h2>Series</h2>
+                                <p>I don’t have dreams, I have goals...</p>
+                                
+                                <a href="/login"><span>Watch Now</span> <i class="fa fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <br><br>
+    <section class="blog-details spad">
+    
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                <div class="blog__details__item__text">
+                    <center>
+                    <h4>Youflix A Video Streaming Platform</h4>
+                    <p> Experience a world of entertainment right at your fingertips. 
+                        With our cutting-edge platform, you can indulge in a vast library of movies, TV shows, documentaries, and more.
+                         Whether you're a fan of thrilling action, captivating drama, hilarious comedies, or thought-provoking documentaries, we have something for everyone.
+                    </p>
+                </center><br><br>
+                
+                </div>
+            </div>
+            </div>
+        </div>
+    <!-- Hero Section End -->
+
+
+    <section class="container">
+        <div class="container">
+            <div class="row">
+                {% for i in view %}
+                <div class="col-lg-6">
+                    <div class="section-title">
+                        <h5>{{ i.title }}</h5>
+                        <br>
+                     
+                       
+                      <p>{{ message }}</p>
+                    </div>
+    
+                    <div class="anime__video__player">
+                    <h2></h2>
+                    <video playsinline controls poster="{{i.thumb_image.url}}"> 
+                        <source src="{{ i.video_file.url}}" ></video>
+                        <!-- Captions are optional -->
+            
+                    </video>
+                    
+                </div>
+                    <p class="card-text" style="color: aliceblue; font-size: 16px;">
+                      {{i.description}}  
+                  </p>
+               
+                  <br><br>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+ 
+{% endblock %}
