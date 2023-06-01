@@ -58,11 +58,10 @@ class ContactUs(models.Model):
         return self.email
     
 
-from django.contrib.auth.models import User
 
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    text = models.TextField(max_length=255,null=True)
+    user = models.ForeignKey(UserReg, on_delete=models.CASCADE)
+    text = models.TextField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

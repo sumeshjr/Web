@@ -2,6 +2,13 @@
 {% load static %}
 {% block header %}
 
+{% if message %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endif %}
+
+
 
     <section class="h-100 gradient-custom-2">
       <div class="container py-5 h-100">

@@ -1,11 +1,12 @@
 
-from django.shortcuts import render,HttpResponseRedirect,get_object_or_404,redirect
+from django.shortcuts import render,HttpResponseRedirect,get_object_or_404,redirect,HttpResponse
 from .models import *
 from pyexpat.errors import messages
 from django.contrib.auth.models import *
 from django.db.models import Q
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from django.db.models import Count
 
 
 def index(request):
@@ -45,7 +46,7 @@ def login(request):
         log=UserReg.objects.filter(email=email,password=password)
         if log:
             request.session['u_id']=log[0].id
-            return redirect("/home")
+            return HttpResponseRedirect('/home')
       
     else:       
         return render(request, "login.html")
@@ -57,7 +58,7 @@ def videoview(request):
 
 
 def recentvideo(request):
-    recent=Video.objects.all().order_by("-id")
+    recent=Video.objects.all().order_by("-id")[:10]
 
     return render(request,"recentvideo.html",{"recent":recent})
 
@@ -71,12 +72,14 @@ def home(request):
     except UserReg.DoesNotExist:
         return redirect("login")
     
+    comm=Comment.objects.all().order_by('-id')
     screen=Home.objects.all()
     videos = Video.objects.all().order_by('-id') 
     context = {
         "user": user,
         "videos": videos,
-        "screen":screen
+        "screen":screen,
+        'comm':comm
     }
     
     return render(request, "home.html", context)
@@ -152,6 +155,11 @@ def favorites_list(request):
         return render(request, 'favlist.html', {'favorites': None})
 
 
+
+
+
+
+
 def like_video(request, video_id):
     video = get_object_or_404(Video, id=video_id)
 
@@ -197,7 +205,8 @@ def edit_profile(request):
                 user.profileimage.delete(save=False)
             user.profileimage = profile_image
         user.save()
-        return redirect("userprofile/")
+        message="Video Removed From Favourites"
+        return redirect("userprofile/",{'message':message})
 
     return render(request, "edit_profile.html", {"user": user})
 
@@ -217,23 +226,23 @@ def contact(request):
         return HttpResponseRedirect("/?msg="+msg)
     return render(request, 'contact.html')
 
+
+
 def addcomment(request):
-    msg=""
-    if request.POST:
-        email = request.POST.get('email')
-        text= request.POST.get('text')
+    if request.method == 'POST':
+        user_id = request.session.get('u_id')
+        if user_id:
+            user = UserReg.objects.get(id=user_id)
+            text = request.POST.get('comment_text')
 
-        comment=Comment.objects.create(email=email,text=text)
-        comment.save()
+            comment = Comment(user=user, text=text)
+            comment.save()
 
-        msg="Thanks for your Feedback"
-        return HttpResponseRedirect("/?msg="+msg)
-    return render(request, 'contact.html')
+            return HttpResponseRedirect('/home')
+    return HttpResponse('Error: Unable to add comment')
 
-def comments(request):
-    comm=Comment.objects.all()
-    return redirect(request,'/home',{'comm':comm})
 
+    
 
 def search_videos(request):
     query = request.GET.get('query')

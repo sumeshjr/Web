@@ -23,13 +23,11 @@
               <br>
               <p>{{ message }}</p>
             </div>
-            <div class="anime__video__player">
-              <h2></h2>
-              <video playsinline controls poster="{{ i.thumb_image.url }}" class="video-player">
-                <source src="{{ i.video_file.url }}">
-                <!-- Captions are optional -->
+            <div style="position: relative; padding-bottom: 56.25%; overflow: hidden;">
+              <video playsinline controls poster="{{ i.thumb_image.url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;object-fit: cover; width: 100%; height: 100%;">
+                  <source src="{{ i.video_file.url }}">
               </video>
-            </div>
+          </div>
             <p class="card-text" style="color: aliceblue; font-size: 16px;">
               {{ i.description }}
             </p>

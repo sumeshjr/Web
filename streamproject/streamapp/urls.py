@@ -26,8 +26,9 @@ urlpatterns = [
     path ('videos/like/', views.like_video, name='like_video'),
     path ('editprofile/',views.edit_profile,name='edit_profile'),
     path ('like-video/<int:video_id>/', like_video, name='like_video'),
-    path ('addcomment/',views.addcomment),
+    path('addcomment/', addcomment, name='addcomment'),
     path ('search/', views.search_videos, name='search_videos'),
+
     
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

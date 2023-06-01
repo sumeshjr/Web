@@ -35,9 +35,7 @@ object-fit: cover;
 
 
 
-
 <section class="container">
-    <div class="container">
     <div class="container">
         <div class="row">
             {% if favorites %}
@@ -45,31 +43,49 @@ object-fit: cover;
             <div class="col-lg-6">
                 <div class="section-title">
                     <h5>{{ i.title }}</h5>
-                    <br>
-                  
-                  <p>{{ message }}</p>
+                    
+                    <p>{{ message }}</p>
                 </div>
 
-                <div class="anime__video__player">
-                    <h2></h2>
-                    <video playsinline controls poster="{{i.thumb_image.url}}"> 
-                        <source src="{{ i.video_file.url}}" ></video>
-                        <!-- Captions are optional -->
-            
+                <div style="position: relative; padding-bottom: 56.25%; overflow: hidden;">
+                    <video playsinline controls poster="{{ i.thumb_image.url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;object-fit: cover; width: 100%; height: 100%;">
+                        <source src="{{ i.video_file.url }}">
                     </video>
-                    
                 </div>
-                <p class="card-text" style="color: aliceblue; font-size: 16px;">
-                    {{i.description}}
+                <br>
+
+
+                <div class="title">
+                    <button id="description-button-{{ forloop.counter0 }}" class="btn btn-outline-light" >Description</button>
                     <br>
-                    <form method="POST" action="{% url 'remove_from_fav' video_id=i.id %}">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-outline-warning">Remove From Favorites</button>
-                  </form>
-                </p>
-            </div>
+                    <p id="description-{{ forloop.counter0 }}" class="card-text" style="color: aliceblue; font-size: 16px; display: none;">
+                        {{ i.description }}
+                    </p>
+                </div>
+                <br>
+                <form method="POST" action="{% url 'remove_from_fav' video_id=i.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-warning">Remove From Favorites</button>
+                </form>
+                <br><br>
+
+                <script>
+                    const button{{ forloop.counter0 }} = document.getElementById('description-button-{{ forloop.counter0 }}');
+                    const description{{ forloop.counter0 }} = document.getElementById('description-{{ forloop.counter0 }}');
+
+                    button{{ forloop.counter0 }}.addEventListener('click', function() {
+                        if (description{{ forloop.counter0 }}.style.display === 'none') {
+                            description{{ forloop.counter0 }}.style.display = 'block';
+                        } else {
+                            description{{ forloop.counter0 }}.style.display = 'none';
+                        }
+                    });
+                </script>
+        </div>
             {% endfor %}
         </div>
+    </div>
+</section>
         
     </div>
     {% else %}

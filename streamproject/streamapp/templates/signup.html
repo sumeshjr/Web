@@ -38,7 +38,7 @@
               <span class="icon_profile"></span>
             </div>
             <div class="input__item">
-              <input name="phone" type="text" placeholder="Your Phone Number" required>
+              <input name="phone" type="text" placeholder="Your Phone Number" pattern="[789][0-9]{9}" required>
               <span class="icon_profile"></span>
             </div>
             <div class="input__item">
@@ -46,18 +46,18 @@
               <span class="icon_profile"></span>
             </div>
             <div class="input__item">
-              <input name="email" type="text" placeholder="Email address" required>
+              <input name="email" type="text" placeholder="Email address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
               <span class="icon_mail"></span>
             </div>
 
             <div class="input__item">
-              <input name="password" type="password" placeholder="Password" >
+              <input name="password" type="password" placeholder="Password" pattern="/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g" >
               <span class="icon_lock"></span>
             </div>
-            <br>
+         
             <div >
-              Profile Picture
-              <input type="file" id="profile-pic" name="profile-pic" accept="image/*" required><br><br>
+              
+              <h5>Profile Picture <br><input type="file" id="profile-pic" name="profile-pic" accept="image/*" required></h5><br>
 
             </div>
             <input type="submit" class="site-btn" value="Sign Up">
@@ -70,7 +70,7 @@
       <div class="col-lg-6">
         <div class="login__register">
             <h3>Already Have An Account?</h3>
-            <a href="/loginuser" class="primary-btn">Login</a>
+            <a href="/login" class="primary-btn">Login</a>
         </div>
     </div>
 </div>

@@ -1,31 +1,13 @@
 {% load static %}
 {% block header %}
 
+{% if message %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endif %}
 
 
-<style>
-
-    .anime__video__player {
-    width: 400px;
-    height: 400px;
-    position: relative;
-    overflow: hidden;
-    }
-    
-    .anime__video__player video {
-    width: 400px;
-    height: 400px;
-    object-fit: cover;
-    }
-    
-    .anime__video__player video::poster {
-    width: 400px;
-    height: 400px;
-    object-fit: cover;
-    }
-
-    
-    </style>
 
 <!DOCTYPE html>
 <html lang="zxx">
@@ -118,7 +100,7 @@
     <section class="hero">
         <div class="container">
             <div class="hero__slider owl-carousel">
-                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/akat.jpg' %}">
+                <div class="hero__items set-bg" data-setbg="{% static 'img/akat.jpg' %}">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
@@ -130,7 +112,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/peakpx.jpg' %}">
+                <div class="hero__items set-bg" data-setbg="{% static 'img/peakpx.jpg' %}">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
@@ -142,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="hero__items set-bg" data-setbg="{% static 'img/hero/403408.jpg' %}">
+                <div class="hero__items set-bg" data-setbg="{% static 'img/403408.jpg' %}">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="hero__text">
@@ -166,37 +148,48 @@
                 <div class="section-title">
                     <h5>{{ i.title }}</h5>
                     <br>
-                    
-                    
-                   
-                  <p>{{ message }}</p>
+                    <p>{{ message }}</p>
                 </div>
 
-                <div class="anime__video__player">
-                    <h2></h2>
-                    <video playsinline controls poster="{{i.thumb_image.url}}"> 
-                        <source src="{{ i.video_file.url}}" ></video>
-                        <!-- Captions are optional -->
-            
+                <div style="position: relative; padding-bottom: 56.25%; overflow: hidden;">
+                    <video playsinline controls poster="{{ i.thumb_image.url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;object-fit: cover; width: 100%; height: 100%;">
+                        <source src="{{ i.video_file.url }}">
                     </video>
-                    
                 </div>
-    
-                <p class="card-text" style="color: aliceblue; font-size: 16px;">
-                    {{i.description}}  
-                </p>
+                <br>
+
+                <div class="title">
+                    <button id="description-button-{{ forloop.counter0 }}"class="btn btn-outline-light">Description</button>
+                    <br>
+                    <p id="description-{{ forloop.counter0 }}" class="card-text" style="color: aliceblue; font-size: 16px; display: none;">
+                        {{ i.description }}
+                    </p>
+                </div>
+                <br>
                 <form method="POST" action="{% url 'add_to_favorites' video_id=i.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-success">Add to Favorites</button>
                 </form>
-                <br>
-               
-               <br>
-            </div>
+                <br><br>
+
+                <script>
+                    const button{{ forloop.counter0 }} = document.getElementById('description-button-{{ forloop.counter0 }}');
+                    const description{{ forloop.counter0 }} = document.getElementById('description-{{ forloop.counter0 }}');
+
+                    button{{ forloop.counter0 }}.addEventListener('click', function() {
+                        if (description{{ forloop.counter0 }}.style.display === 'none') {
+                            description{{ forloop.counter0 }}.style.display = 'block';
+                        } else {
+                            description{{ forloop.counter0 }}.style.display = 'none';
+                        }
+                    });
+                </script>
+        </div>
             {% endfor %}
         </div>
     </div>
 </section>
+
 <br>
 
  <!-- Search model Begin -->
@@ -219,29 +212,44 @@
 <section class="container">
 <div class="anime__details__form">
     <div class="section-title">
-        <h5>Your Comment</h5>
+        <h5>Add Comment</h5>
     </div>
-    <form method="post">
+    <form method="post" action="{% url 'addcomment' %}">
         {% csrf_token %}
-        <textarea name="text" placeholder="Your Comment"></textarea>
+        <textarea name="comment_text" placeholder="Add a Comment"></textarea>
+        
         <button type="submit"><i class="fa fa-location-arrow"></i> Comment</button>
     </form>
 </div>
 </section>
 <br>
-
 <section class="container">
-    <div class="anime__details__form">
-        <div class="section-title">
-            <h5>Comments</h5>
-        </div>
-       {% for i in view %}
-       {{ i.text }}
-       {% endfor %}
-    </div>
-    </section>
+<div class="row">
+    <div class="col-lg-8 col-md-8">
+        <div class="anime__details__review">
+            <div class="section-title">
+                <h5>Comments</h5>
+            </div>
+            {% for i in comm %}
+            <div class="anime__review__item">
+                <div class="anime__review__item__text">
+                    <p>{{ i.created_at }}</p>
 
-<!-- Display existing comments -->
+                    <h6>{{ i.user }}</p>
+                    
+                    <h6> {{ i.text }}</h6>
+                    
+                    
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</section>
+
+
 
 
   <br><br>
@@ -294,13 +302,5 @@
     
     
     </body>
-    
-    <script>
-        window.onload = function() {
-            var message = "{{ message }}";
-            if (message) {
-                alert(message);
-            }
-        };
-    </script>
+
     </html>
